@@ -44,7 +44,7 @@ one that carries a finding:</p><div class=highlight><pre tabindex=0 style=color:
 </span></span><span style=display:flex><span>  ✔ PASSED · 1 finding held · 21ms
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span>5 scenarios: 5 passed — 1 finding held (0s)
-</span></span><span style=display:flex><span>reports → shinari-out/{results.tsv,results.json,junit.xml,journal.jsonl,findings.md,findings.sarif}
+</span></span><span style=display:flex><span>reports → shinari-out/{results.tsv,results.json,junit.xml,journal.jsonl,findings.md,findings.sarif,report.html}
 </span></span></code></pre></div><p>The ◆ line is the point: the exactly-once assertion <strong>failed</strong>, and the run is
 still <strong>green</strong> (exit <code>0</code>). That failure is a <em>known, documented gap</em>, declared
 with <code>finding:</code> in the scenario, so the suite stays a signal instead of a wall
@@ -53,5 +53,7 @@ a plain step.</p><h2 id=6-read-the-reports>6. Read the reports <a class=hanchor 
 </span></span></code></pre></div><p>Per scenario you get <strong>Injected</strong> (which faults ran), <strong>Held</strong> (which
 assertions passed), and <strong>Gapped</strong> (the findings, with the observed failure).
 There is also <code>results.json</code>, <code>junit.xml</code>, <code>results.tsv</code>, <code>journal.jsonl</code> (the
-full event stream), and <code>findings.sarif</code> for code-scanning tools.</p><h2 id=where-you-are>Where you are <a class=hanchor href=#where-you-are aria-label="Link to this section">#</a></h2><p>You ran a suite, broke a system on purpose, and read its ledger. Next:
+full event stream), <code>findings.sarif</code> for code-scanning tools, and <code>report.html</code>,
+a self-contained page you can open in a browser or drop into a chat thread to
+share the run.</p><h2 id=where-you-are>Where you are <a class=hanchor href=#where-you-are aria-label="Link to this section">#</a></h2><p>You ran a suite, broke a system on purpose, and read its ledger. Next:
 <a href=/tutorials/first-scenario/>write your own scenario</a>.</p><nav class=doc-pager><a class=pager-prev href=/tutorials/first-scenario/>← Your first scenario</a></nav></article></main><footer class=site-footer><div class=wrap><p class=footer-meta>© 2026 The Shinari Authors · <a href=https://github.com/shinari-dev/shinari/blob/main/LICENSE rel=noopener>Apache-2.0</a></p></div></footer></body></html>
