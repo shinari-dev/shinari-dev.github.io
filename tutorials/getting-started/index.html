@@ -10,7 +10,7 @@ archive, verifies it against <code>checksums.txt</code>, and installs <code>shin
 </span></span></span><span style=display:flex><span>  sh -c <span style=color:#a5d6ff>&#34;</span><span style=color:#ff7b72>$(</span>curl -sSL https://shinari.dev/install.sh<span style=color:#ff7b72>)</span><span style=color:#a5d6ff>&#34;</span>
 </span></span></code></pre></div><p>Prefer to build from source? With Go 1.26+, from the repository root:</p><div class=highlight><pre tabindex=0 style=color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-sh data-lang=sh><span style=display:flex><span>go build -o shinari ./cli
 </span></span></code></pre></div><p>Either way, run <code>shinari</code> with no arguments and you should see the command list:
-<code>init</code>, <code>validate</code>, <code>list</code>, <code>run</code>.</p><p>The remaining steps assume <code>shinari</code> is on your <code>PATH</code>. If you built from source
+<code>new</code>, <code>init</code>, <code>validate</code>, <code>list</code>, <code>explain</code>, <code>run</code>, <code>tui</code>, <code>log</code>, <code>watch</code>.</p><p>The remaining steps assume <code>shinari</code> is on your <code>PATH</code>. If you built from source
 and did not install it, call the local binary as <code>./shinari</code> instead.</p><h2 id=2-meet-the-quickstart-project>2. Meet the quickstart project <a class=hanchor href=#2-meet-the-quickstart-project aria-label="Link to this section">#</a></h2><p>The repo ships a complete example under <code>examples/quickstart/</code>: a toy job
 store driven entirely through shell, zero infrastructure required. Look at
 its shape:</p><div class=highlight><pre tabindex=0 style=color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-text data-lang=text><span style=display:flex><span>examples/quickstart/
@@ -23,13 +23,19 @@ its shape:</p><div class=highlight><pre tabindex=0 style=color:#e6edf3;backgroun
 </span></span></code></pre></div><p>Nothing about this layout is mandatory. Shinari recognizes its files by
 their <code>apiVersion</code>/<code>kind</code> header, not by name or location.</p><h2 id=3-validate-before-running>3. Validate before running <a class=hanchor href=#3-validate-before-running aria-label="Link to this section">#</a></h2><div class=highlight><pre tabindex=0 style=color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-sh data-lang=sh><span style=display:flex><span>shinari -p examples/quickstart validate
 </span></span></code></pre></div><div class=highlight><pre tabindex=0 style=color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-text data-lang=text><span style=display:flex><span>[warn] rule 8: ... no lifecycle provider (up/down) configured ...
-</span></span><span style=display:flex><span>valid — 2 scenario(s), 2 warning(s)
+</span></span><span style=display:flex><span>[warn] rule 15: ... finding has no explicit id: ...
+</span></span><span style=display:flex><span>valid — 5 scenario(s), 6 warning(s)
 </span></span></code></pre></div><p><code>validate</code> is static: it resolves every verb, checks every argument and every
-<code>${...}</code> reference, and never touches the system. The warning is expected;
-this project uses no docker stack.</p><h2 id=4-list-what-was-discovered>4. List what was discovered <a class=hanchor href=#4-list-what-was-discovered aria-label="Link to this section">#</a></h2><div class=highlight><pre tabindex=0 style=color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-sh data-lang=sh><span style=display:flex><span>shinari -p examples/quickstart list
-</span></span></code></pre></div><div class=highlight><pre tabindex=0 style=color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-text data-lang=text><span style=display:flex><span>core
+<code>${...}</code> reference, and never touches the system. The warnings are expected:
+this project uses no docker stack (rule 8), and its one finding deliberately
+leaves its ledger identity unpinned (rule 15).</p><h2 id=4-list-what-was-discovered>4. List what was discovered <a class=hanchor href=#4-list-what-was-discovered aria-label="Link to this section">#</a></h2><div class=highlight><pre tabindex=0 style=color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-sh data-lang=sh><span style=display:flex><span>shinari -p examples/quickstart list
+</span></span></code></pre></div><div class=highlight><pre tabindex=0 style=color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-text data-lang=text><span style=display:flex><span>concurrency
+</span></span><span style=display:flex><span>  concurrent-submits — Two jobs are submitted and completed at the same instant ...
+</span></span><span style=display:flex><span>core
 </span></span><span style=display:flex><span>  clean-complete — A job submitted and completed normally runs exactly once.
+</span></span><span style=display:flex><span>  env-config — Demonstrates environment injection: ...
 </span></span><span style=display:flex><span>recovery
+</span></span><span style=display:flex><span>  orphans-after-crash — Two jobs run; one completes and one is orphaned by a crash. ...
 </span></span><span style=display:flex><span>  worker-killed-mid-task — A worker dies mid-task and a peer recovers the job. ...
 </span></span></code></pre></div><p>Scenarios group into <strong>suites</strong> by directory convention (<code>scenarios/&lt;suite>/</code>).</p><h2 id=5-run-the-suite>5. Run the suite <a class=hanchor href=#5-run-the-suite aria-label="Link to this section">#</a></h2><div class=highlight><pre tabindex=0 style=color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-sh data-lang=sh><span style=display:flex><span>shinari -p examples/quickstart run
 </span></span></code></pre></div><p>Each scenario prints its lifecycle phase by phase, then a verdict. Here is the

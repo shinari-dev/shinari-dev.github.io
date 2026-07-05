@@ -11,8 +11,7 @@
 </span></span></span><span style=display:flex><span><span style=color:#6e7681>        </span><span style=color:#7ee787>with</span>:<span style=color:#6e7681>
 </span></span></span><span style=display:flex><span><span style=color:#6e7681>          </span><span style=color:#7ee787>path</span>:<span style=color:#6e7681> </span><span style=color:#a5d6ff>&#34;/jobs/${.params.job}&#34;</span><span style=color:#6e7681>
 </span></span></span><span style=display:flex><span><span style=color:#6e7681>          </span><span style=color:#7ee787>form</span>:<span style=color:#6e7681> </span><span style=color:#a5d6ff>&#34;${.params.inputs}&#34;</span><span style=color:#6e7681>
-</span></span></span><span style=display:flex><span><span style=color:#6e7681>        </span><span style=color:#7ee787>capture</span>:<span style=color:#6e7681>
-</span></span></span><span style=display:flex><span><span style=color:#6e7681>          </span><span style=color:#7ee787>id</span>:<span style=color:#6e7681> </span><span style=color:#a5d6ff>&#34;.id&#34;</span><span style=color:#6e7681>
+</span></span></span><span style=display:flex><span><span style=color:#6e7681>        </span><span style=color:#7ee787>read</span>:<span style=color:#6e7681> </span><span style=color:#a5d6ff>&#34;.id&#34;</span><span style=color:#6e7681>
 </span></span></span><span style=display:flex><span><span style=color:#6e7681>  </span><span style=color:#7ee787>await</span>:<span style=color:#6e7681>
 </span></span></span><span style=display:flex><span><span style=color:#6e7681>    </span><span style=color:#7ee787>params</span>:<span style=color:#6e7681> </span>[<span style=color:#a5d6ff>of, timeout]</span><span style=color:#6e7681>
 </span></span></span><span style=display:flex><span><span style=color:#6e7681>    </span><span style=color:#7ee787>do</span>:<span style=color:#6e7681>
@@ -40,8 +39,9 @@
 </span></span></span><span style=display:flex><span><span style=color:#6e7681>  </span><span style=color:#7ee787>app</span>:<span style=color:#6e7681>
 </span></span></span><span style=display:flex><span><span style=color:#6e7681>    </span><span style=color:#7ee787>use</span>:<span style=color:#6e7681> </span><span style=color:#a5d6ff>./providers/app</span><span style=color:#6e7681>
 </span></span></span></code></pre></div><p>The instance name (<code>app</code>) becomes the verb namespace: <code>app.submit</code>,
-<code>app.count</code>. Configure the same definition twice under two names (<code>appA</code>,
-<code>appB</code>) to talk to two deployments.</p><h2 id=3-use-the-vocabulary>3. Use the vocabulary <a class=hanchor href=#3-use-the-vocabulary aria-label="Link to this section">#</a></h2><div class=highlight><pre tabindex=0 style=color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-yaml data-lang=yaml><span style=display:flex><span><span style=color:#7ee787>method</span>:<span style=color:#6e7681>
+<code>app.count</code>. The body&rsquo;s leaf verbs (<code>http.post</code>, <code>http.get</code>) resolve against
+the instances configured in the same project, so the <code>http</code> instance&rsquo;s
+<code>baseUrl</code> decides which deployment the vocabulary talks to.</p><h2 id=3-use-the-vocabulary>3. Use the vocabulary <a class=hanchor href=#3-use-the-vocabulary aria-label="Link to this section">#</a></h2><div class=highlight><pre tabindex=0 style=color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-yaml data-lang=yaml><span style=display:flex><span><span style=color:#7ee787>method</span>:<span style=color:#6e7681>
 </span></span></span><span style=display:flex><span><span style=color:#6e7681>  </span>- <span style=color:#7ee787>phase</span>:<span style=color:#6e7681> </span><span style=color:#a5d6ff>&#34;Submit a long job&#34;</span><span style=color:#6e7681>
 </span></span></span><span style=display:flex><span><span style=color:#6e7681>    </span><span style=color:#7ee787>steps</span>:<span style=color:#6e7681>
 </span></span></span><span style=display:flex><span><span style=color:#6e7681>      </span>- <span style=color:#7ee787>run</span>:<span style=color:#6e7681> </span><span style=color:#a5d6ff>app.submit</span><span style=color:#6e7681>
@@ -53,7 +53,7 @@
 </span></span></span><span style=display:flex><span><span style=color:#7ee787>verify</span>:<span style=color:#6e7681>
 </span></span></span><span style=display:flex><span><span style=color:#6e7681>  </span>- <span style=color:#7ee787>run</span>:<span style=color:#6e7681> </span><span style=color:#a5d6ff>app.await</span><span style=color:#6e7681>
 </span></span></span><span style=display:flex><span><span style=color:#6e7681>    </span><span style=color:#7ee787>with</span>:<span style=color:#6e7681>
-</span></span></span><span style=display:flex><span><span style=color:#6e7681>      </span><span style=color:#7ee787>of</span>:<span style=color:#6e7681> </span><span style=color:#a5d6ff>&#34;${.outputs.job}&#34;</span><span style=color:#6e7681>
+</span></span></span><span style=display:flex><span><span style=color:#6e7681>      </span><span style=color:#7ee787>of</span>:<span style=color:#6e7681> </span><span style=color:#a5d6ff>&#34;${.outputs.job.value}&#34;</span><span style=color:#6e7681>
 </span></span></span><span style=display:flex><span><span style=color:#6e7681>      </span><span style=color:#7ee787>timeout</span>:<span style=color:#6e7681> </span><span style=color:#a5d6ff>420</span><span style=color:#6e7681>
 </span></span></span><span style=display:flex><span><span style=color:#6e7681>  </span>- <span style=color:#7ee787>run</span>:<span style=color:#6e7681> </span><span style=color:#a5d6ff>app.count</span><span style=color:#6e7681>
 </span></span></span><span style=display:flex><span><span style=color:#6e7681>    </span><span style=color:#7ee787>with</span>:<span style=color:#6e7681> </span><span style=color:#a5d6ff>sleep</span><span style=color:#6e7681>
@@ -63,7 +63,11 @@
 </span></span></span><span style=display:flex><span><span style=color:#6e7681>      </span><span style=color:#7ee787>of</span>:<span style=color:#6e7681> </span><span style=color:#a5d6ff>&#34;${.outputs.total.value}&#34;</span><span style=color:#6e7681>
 </span></span></span><span style=display:flex><span><span style=color:#6e7681>      </span><span style=color:#7ee787>equals</span>:<span style=color:#6e7681> </span><span style=color:#a5d6ff>1</span><span style=color:#6e7681>
 </span></span></span><span style=display:flex><span><span style=color:#6e7681>    </span><span style=color:#7ee787>desc</span>:<span style=color:#6e7681> </span><span style=color:#a5d6ff>&#34;exactly once&#34;</span><span style=color:#6e7681>
-</span></span></span></code></pre></div><h2 id=what-the-engine-infers-for-you>What the engine infers for you <a class=hanchor href=#what-the-engine-infers-for-you aria-label="Link to this section">#</a></h2><ul><li><strong>Kind</strong>: a verb whose body mutates (<code>http.post</code>) is an <em>action</em>; a body
+</span></span></span></code></pre></div><p>A composed verb&rsquo;s result is its <strong>last body step&rsquo;s value</strong>, after that step&rsquo;s
+<code>read:</code> transform. <code>app.submit</code> ends in <code>read: ".id"</code>, so the verb returns the
+job id; <code>as: job</code> then wraps it in the usual <code>{value, output, meta}</code> envelope,
+which is why the scenario passes <code>${.outputs.job.value}</code> (the id itself) to
+<code>app.await</code>.</p><h2 id=what-the-engine-infers-for-you>What the engine infers for you <a class=hanchor href=#what-the-engine-infers-for-you aria-label="Link to this section">#</a></h2><ul><li><strong>Kind</strong>: a verb whose body mutates (<code>http.post</code>) is an <em>action</em>; a body
 ending in <code>assert</code> is an <em>assertion</em>; otherwise it&rsquo;s a <em>probe</em>. Kind drives
 dry-run, steadyState re-runs, and where <code>finding:</code> is allowed.</li><li><strong>Args</strong>: <code>params:</code> become the verb&rsquo;s arg spec: required unless marked
 <code>"name?"</code>, first param doubles as the scalar shorthand

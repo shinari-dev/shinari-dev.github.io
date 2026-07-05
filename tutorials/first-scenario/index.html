@@ -39,22 +39,27 @@ nothing but shell.</p><h2 id=2-write-a-scenario>2. Write a scenario <a class=han
 </span></span></span><span style=display:flex><span><span style=color:#6e7681>    </span><span style=color:#7ee787>with</span>:<span style=color:#6e7681> </span><span style=color:#a5d6ff>&#34;echo cleaning up&#34;</span><span style=color:#6e7681>
 </span></span></span></code></pre></div><p>Read it top to bottom; it is the test lifecycle:</p><table><thead><tr><th>section</th><th>role</th><th>on failure</th></tr></thead><tbody><tr><td><code>setup</code></td><td>arrange, once</td><td>run is <code>ERRORED</code>: the harness never came up</td></tr><tr><td><code>method</code></td><td>ordered phases of faults + observations</td><td>run is <code>FAILED</code></td></tr><tr><td><code>verify</code></td><td>cumulative, terminal checks</td><td>run is <code>FAILED</code></td></tr><tr><td><code>teardown</code></td><td>always runs, even after failure</td><td>never changes the verdict</td></tr></tbody></table><h2 id=3-validate-then-run>3. Validate, then run <a class=hanchor href=#3-validate-then-run aria-label="Link to this section">#</a></h2><div class=highlight><pre tabindex=0 style=color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-sh data-lang=sh><span style=display:flex><span>shinari validate     <span style=color:#8b949e;font-style:italic># from inside the directory; cwd is the default project</span>
 </span></span><span style=display:flex><span>shinari run
-</span></span></code></pre></div><div class=highlight><pre tabindex=0 style=color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-text data-lang=text><span style=display:flex><span>=== survive-nothing
-</span></span><span style=display:flex><span>  ✓ exec.run
-</span></span><span style=display:flex><span>  -- Do the thing
-</span></span><span style=display:flex><span>  ⚡ fault injected: exec.run
-</span></span><span style=display:flex><span>  ✓ exec.run
-</span></span><span style=display:flex><span>  ✓ we said hello
-</span></span><span style=display:flex><span>  ✓ exec.run
-</span></span><span style=display:flex><span>  =&gt; PASSED
-</span></span></code></pre></div><p>Note the capture: <code>as: said</code> stored the step&rsquo;s output under the <code>outputs</code>
+</span></span></code></pre></div><div class=highlight><pre tabindex=0 style=color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-text data-lang=text><span style=display:flex><span>━━ survive-nothing ─────────────────────────────────────────
+</span></span><span style=display:flex><span>  setup     ✓ exec.run
+</span></span><span style=display:flex><span>  method    ✓ exec.run
+</span></span><span style=display:flex><span>  verify    ✓ we said hello
+</span></span><span style=display:flex><span>  teardown  ✓ exec.run
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  ✔ PASSED · 9ms
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>1 scenario: 1 passed (0s)
+</span></span></code></pre></div><p>A step that injects a fault in <code>method</code> would carry a <code>⚡ (fault injected)</code>
+marker; this <code>exec.run</code> declares no <code>effect:</code>, so it renders as a plain step.</p><p>Note the capture: <code>as: said</code> stored the step&rsquo;s output under the <code>outputs</code>
 namespace, and <code>${.outputs.said.value}</code> read it back in <code>verify</code>. The var read
 earlier (<code>${.vars.greeting}</code>) lives in its own namespace; every <code>${...}</code>
 reference names the namespace it resolves against. Captures are scenario-global,
-ordered, last-write-wins.</p><h2 id=4-break-it-on-purpose>4. Break it, on purpose <a class=hanchor href=#4-break-it-on-purpose aria-label="Link to this section">#</a></h2><p>Change the assertion to <code>equals: goodbye</code> and run again:</p><div class=highlight><pre tabindex=0 style=color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-text data-lang=text><span style=display:flex><span>  ✗ we said hello — assert failed: expected hello == goodbye
-</span></span><span style=display:flex><span>  =&gt; FAILED
+ordered, last-write-wins.</p><h2 id=4-break-it-on-purpose>4. Break it, on purpose <a class=hanchor href=#4-break-it-on-purpose aria-label="Link to this section">#</a></h2><p>Change the assertion to <code>equals: goodbye</code> and run again:</p><div class=highlight><pre tabindex=0 style=color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-text data-lang=text><span style=display:flex><span>  verify    ✗ we said hello — assert failed: expected hello == goodbye
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  ✘ FAILED · 7ms
 </span></span></code></pre></div><p>Exit code <code>1</code>: <em>your system broke</em>. Now break the harness instead; change
-<code>setup</code> to <code>exec.run, with: "exit 1"</code>:</p><div class=highlight><pre tabindex=0 style=color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-text data-lang=text><span style=display:flex><span>  =&gt; ERRORED
+<code>setup</code> to <code>exec.run, with: "exit 1"</code>:</p><div class=highlight><pre tabindex=0 style=color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-text data-lang=text><span style=display:flex><span>  setup     ✗ exec.run — exec.run &#34;exit 1&#34;: exit status 1
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  ✘ ERRORED · 4ms
 </span></span></code></pre></div><p>Exit code <code>2</code>: <em>the run never happened</em>. Distinct exit codes let CI tell the
 difference without parsing logs.</p><h2 id=5-add-a-steady-state-gate>5. Add a steady-state gate <a class=hanchor href=#5-add-a-steady-state-gate aria-label="Link to this section">#</a></h2><p>Insert between <code>setup</code> and <code>method</code>:</p><div class=highlight><pre tabindex=0 style=color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-yaml data-lang=yaml><span style=display:flex><span><span style=color:#7ee787>steadyState</span>:<span style=color:#6e7681>
 </span></span></span><span style=display:flex><span><span style=color:#6e7681>  </span>- <span style=color:#7ee787>run</span>:<span style=color:#6e7681> </span><span style=color:#a5d6ff>exec.run</span><span style=color:#6e7681>

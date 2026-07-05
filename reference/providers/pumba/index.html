@@ -12,6 +12,6 @@ pattern). Pumba logs <code>no containers found</code> and exits 0 on a miss, so 
 target fails silently. Pin the name (<code>container_name:</code> in the compose file) so
 a service-style target resolves.</li><li>The fault is backgrounded and is not synchronized: nothing waits for Pumba to
 attach and apply the rule before the scenario proceeds. Add a <code>wait_until</code>/
-<code>sleep</code> if a step must observe the fault already in effect.</li><li>Surviving a fault is asserted today; <em>observing the degradation itself</em> (for
-example, that latency actually rose) needs a latency-capturing probe that the
-current verb set does not provide.</li></ul><nav class=doc-pager><a class=pager-next href=/reference/providers/exec/>exec →</a></nav></article></main><footer class=site-footer><div class=wrap><p class=footer-meta>© 2026 The Shinari Authors · <a href=https://github.com/shinari-dev/shinari/blob/main/LICENSE rel=noopener>Apache-2.0</a></p></div></footer><script src=/js/copy-code.min.1c5d7f0ee764e1d68e0dd8359bbe4f9825a4b5db69e49ecf1db48332cfa9a2bc.js defer></script></body></html>
+<code>sleep</code> if a step must observe the fault already in effect.</li><li>To <em>observe the degradation itself</em> (for example, that latency actually
+rose), assert on <code>${.outputs.&lt;name>.meta.durationMs}</code> or run a <code>sample</code>
+window while the fault is active.</li></ul><nav class=doc-pager><a class=pager-next href=/reference/providers/exec/>exec →</a></nav></article></main><footer class=site-footer><div class=wrap><p class=footer-meta>© 2026 The Shinari Authors · <a href=https://github.com/shinari-dev/shinari/blob/main/LICENSE rel=noopener>Apache-2.0</a></p></div></footer><script src=/js/copy-code.min.1c5d7f0ee764e1d68e0dd8359bbe4f9825a4b5db69e49ecf1db48332cfa9a2bc.js defer></script></body></html>

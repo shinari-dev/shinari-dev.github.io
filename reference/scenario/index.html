@@ -36,9 +36,12 @@ the first path segment names which one to read from.</p><table><thead><tr><th>na
 captured object, and full jq is available past the first two segments
 (<code>${.outputs.total.value // 0}</code>, <code>${.outputs.runs.value | length}</code>). A reference
 that is the entire value (<code>with: ${.outputs.job}</code>) preserves the result&rsquo;s type;
-embedded references stringify, and a jq result of null renders as empty.
+embedded references stringify (maps and lists as JSON), and a jq result of null
+renders as empty.
 Captures are scenario-global, ordered, last-write-wins, visible across sections.
-A reference to a name that no namespace declares is a <code>validate</code> error (rule 10).</p><p>A step&rsquo;s result is captured as an <strong>Observation envelope</strong> <code>{value, output, meta}</code>: <code>as: rsp</code> binds the whole envelope, so the payload is
+A reference to a name that no namespace declares is a <code>validate</code> error (rule 10).</p><p>To pass a <strong>literal</strong> <code>${...}</code> through untouched (a shell snippet in <code>exec.run</code>,
+a template payload), escape it with a second dollar: <code>$${HOME}</code> renders as
+<code>${HOME}</code> and is never evaluated.</p><p>A step&rsquo;s result is captured as an <strong>Observation envelope</strong> <code>{value, output, meta}</code>: <code>as: rsp</code> binds the whole envelope, so the payload is
 <code>${.outputs.rsp.value}</code> and the call&rsquo;s facts are
 <code>${.outputs.rsp.meta.durationMs}</code> / <code>${.outputs.rsp.meta.status}</code>. <code>read:</code> and
 <code>capture:</code> operate on the payload. A per-step <code>timeout:</code> (seconds) fails the step
