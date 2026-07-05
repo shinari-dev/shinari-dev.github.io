@@ -43,12 +43,22 @@ error (rule 10). Environment is project-level only; scenarios do not declare it.
 </span></span></span><span style=display:flex><span><span style=color:#6e7681>  </span><span style=color:#7ee787>DATABASE_URL:        # null value</span>:<span style=color:#6e7681> </span><span style=color:#a5d6ff>required, no default</span><span style=color:#6e7681>
 </span></span></span><span style=display:flex><span><span style=color:#6e7681>  </span><span style=color:#7ee787>PORT</span>:<span style=color:#6e7681> </span><span style=color:#a5d6ff>8080</span><span style=color:#6e7681>           </span><span style=color:#8b949e;font-style:italic># default 8080, used unless $PORT is set</span><span style=color:#6e7681>
 </span></span></span></code></pre></div><ul><li>A key with a value provides a default. The matching process variable, when
-set, overrides it.</li><li>A key with a <strong>null</strong> value (no default) is <strong>required</strong>. If the variable is
+set, overrides it.</li><li>Quote a default that must keep its exact text. An unquoted scalar is parsed as
+YAML, so <code>0.20</code> becomes the number <code>0.2</code> and reaches templates and subprocess
+environments as <code>0.2</code>; write <code>"0.20"</code> to preserve it. Values sourced from the
+process environment or a <code>.env</code> file are always strings and unaffected.</li><li>A key with a <strong>null</strong> value (no default) is <strong>required</strong>. If the variable is
 unset at run time the run is <code>ERRORED</code> (exit code 2), the same class as a
 failed setup: the run never happened.</li><li>The engine never reads the process environment itself. The CLI resolves the
 <code>env:</code> block (applying defaults and overrides, enforcing required keys) and
 passes the resolved values to the engine, which exposes them under the <code>.env</code>
-namespace.</li></ul><h3 id=the-env-file>The .env file <a class=hanchor href=#the-env-file aria-label="Link to this section">#</a></h3><p>Like docker compose, Shinari reads a <code>.env</code> file next to the project when one is
+namespace.</li><li>The resolved values also reach providers that shell out: the <code>docker</code> provider
+forwards them to <code>docker compose</code>, so a compose file&rsquo;s <code>${VAR}</code> interpolation
+is sourced from the <code>env:</code> block, and the <code>exec</code> provider layers them onto
+every command&rsquo;s environment. A project-declared value overrides an ambient
+process variable of the same name (declaring it is the stated intent); a
+step-level <code>env:</code> on <code>exec.run</code> overrides both. So declaring a variable in
+<code>env:</code> is enough to feed compose interpolation — no need to <code>source</code> a <code>.env</code>
+into the shell before <code>shinari run</code>.</li></ul><h3 id=the-env-file>The .env file <a class=hanchor href=#the-env-file aria-label="Link to this section">#</a></h3><p>Like docker compose, Shinari reads a <code>.env</code> file next to the project when one is
 present. It is a source of <strong>values</strong>, not a second allowlist: a <code>.env</code> file
 supplies values for variables the <code>env:</code> block already declares, and keys the
 block does not declare are ignored, never injected. So <code>${.env.NAME}</code> still
