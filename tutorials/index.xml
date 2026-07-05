@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Tutorials on Shinari</title><link>https://shinari.dev/tutorials/</link><description>Recent content in Tutorials on Shinari</description><generator>Hugo</generator><language>en-US</language><atom:link href="https://shinari.dev/tutorials/index.xml" rel="self" type="application/rss+xml"/><item><title>Getting started</title><link>https://shinari.dev/tutorials/getting-started/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://shinari.dev/tutorials/getting-started/</guid><description>&lt;p&gt;You assume your system recovers when a worker dies mid-task. In five minutes,
-Shinari will make you prove it. By the end of this tutorial you will have built
-the CLI, broken a running system on purpose, and turned &amp;ldquo;it should recover&amp;rdquo; into
-a test with a verdict.&lt;/p&gt;
-&lt;h2 id="1-build-the-binary"&gt;1. Build the binary &lt;a class="hanchor" href="#1-build-the-binary" aria-label="Link to this section"&gt;#&lt;/a&gt;&lt;/h2&gt;
-&lt;p&gt;Shinari is a single static Go binary. From the repository root:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;go build -o shinari ./cli
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;./shinari
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;You should see the command list: &lt;code&gt;init&lt;/code&gt;, &lt;code&gt;validate&lt;/code&gt;, &lt;code&gt;list&lt;/code&gt;, &lt;code&gt;run&lt;/code&gt;.&lt;/p&gt;</description></item><item><title>Your first scenario</title><link>https://shinari.dev/tutorials/first-scenario/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://shinari.dev/tutorials/first-scenario/</guid><description>&lt;p&gt;You will build a tiny project from scratch (a Project resource, one Scenario)
+Shinari will make you prove it. By the end of this tutorial you will have
+installed the CLI, broken a running system on purpose, and turned &amp;ldquo;it should
+recover&amp;rdquo; into a test with a verdict.&lt;/p&gt;
+&lt;h2 id="1-install-the-binary"&gt;1. Install the binary &lt;a class="hanchor" href="#1-install-the-binary" aria-label="Link to this section"&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Shinari is one static binary with no runtime or dependencies. Install the latest
+release (Linux and macOS, amd64/arm64) with the install script:&lt;/p&gt;</description></item><item><title>Your first scenario</title><link>https://shinari.dev/tutorials/first-scenario/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://shinari.dev/tutorials/first-scenario/</guid><description>&lt;p&gt;You will build a tiny project from scratch (a Project resource, one Scenario)
 and learn the five sections of the timeline by triggering each one.&lt;/p&gt;
 &lt;h2 id="1-create-the-project-root"&gt;1. Create the project root &lt;a class="hanchor" href="#1-create-the-project-root" aria-label="Link to this section"&gt;#&lt;/a&gt;&lt;/h2&gt;
 &lt;p&gt;Make a directory and a &lt;code&gt;project.yml&lt;/code&gt;:&lt;/p&gt;
