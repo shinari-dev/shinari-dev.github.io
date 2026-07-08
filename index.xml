@@ -665,7 +665,15 @@ and returns the same window statistics as the &lt;code&gt;sample&lt;/code&gt; bu
 can hold a system under load while a fault is active and assert it stayed fast
 enough. This is the input side of a degradation assertion, not a load-testing
 tool: there are no ramp profiles or distributed runners, and the HTTP engine
-underneath is an implementation detail.&lt;/p&gt;</description></item><item><title>exec</title><link>https://shinari.dev/reference/providers/exec/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://shinari.dev/reference/providers/exec/</guid><description>&lt;p&gt;The escape hatch. Runs a shell command from the project root, for the gaps the
+underneath is an implementation detail.&lt;/p&gt;</description></item><item><title>Author scenarios with Claude Code</title><link>https://shinari.dev/how-to/author-with-claude-code/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://shinari.dev/how-to/author-with-claude-code/</guid><description>&lt;p&gt;&lt;strong&gt;Goal:&lt;/strong&gt; write a correct scenario faster by letting Claude Code lean on a skill
+that already knows the lifecycle, the step shape, and the validation rules.&lt;/p&gt;
+&lt;h2 id="what-ships-with-the-repository"&gt;What ships with the repository &lt;a class="hanchor" href="#what-ships-with-the-repository" aria-label="Link to this section"&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;The repository includes a Claude Code skill at
+&lt;code&gt;skills/writing-resilience-scenario/&lt;/code&gt;. It is a distilled operating manual for
+authoring: the scenario lifecycle, the step envelope, the result namespaces, the
+findings ledger, and an annotated template that validates clean. It exists so
+Claude Code writes scenarios against the real contract rather than reverse
+engineering it from the Go source.&lt;/p&gt;</description></item><item><title>exec</title><link>https://shinari.dev/reference/providers/exec/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://shinari.dev/reference/providers/exec/</guid><description>&lt;p&gt;The escape hatch. Runs a shell command from the project root, for the gaps the
 typed providers do not cover: a CLI tool with no verb, a fault injected with
 &lt;code&gt;tc&lt;/code&gt;/&lt;code&gt;iptables&lt;/code&gt;, a one-off readiness script. Reach for a typed provider first
 and use &lt;code&gt;exec&lt;/code&gt; only when nothing else fits.&lt;/p&gt;

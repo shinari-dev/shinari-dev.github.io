@@ -176,4 +176,12 @@ default teardown.&lt;/p&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#6e7681"&gt; &lt;/span&gt;- &lt;span style="color:#7ee787"&gt;run&lt;/span&gt;:&lt;span style="color:#6e7681"&gt; &lt;/span&gt;&lt;span style="color:#a5d6ff"&gt;docker.up&lt;/span&gt;&lt;span style="color:#6e7681"&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#6e7681"&gt; &lt;/span&gt;&lt;span style="color:#7ee787"&gt;with&lt;/span&gt;:&lt;span style="color:#6e7681"&gt; &lt;/span&gt;[&lt;span style="color:#a5d6ff"&gt;postgres, app, worker-a]&lt;/span&gt;&lt;span style="color:#6e7681"&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;code&gt;docker.up&lt;/code&gt; runs &lt;code&gt;compose up -d --wait&lt;/code&gt;: it returns when health checks pass,
-so give your services &lt;code&gt;healthcheck:&lt;/code&gt; blocks and &lt;code&gt;setup&lt;/code&gt; stays race-free.&lt;/p&gt;</description></item></channel></rss>
+so give your services &lt;code&gt;healthcheck:&lt;/code&gt; blocks and &lt;code&gt;setup&lt;/code&gt; stays race-free.&lt;/p&gt;</description></item><item><title>Author scenarios with Claude Code</title><link>https://shinari.dev/how-to/author-with-claude-code/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://shinari.dev/how-to/author-with-claude-code/</guid><description>&lt;p&gt;&lt;strong&gt;Goal:&lt;/strong&gt; write a correct scenario faster by letting Claude Code lean on a skill
+that already knows the lifecycle, the step shape, and the validation rules.&lt;/p&gt;
+&lt;h2 id="what-ships-with-the-repository"&gt;What ships with the repository &lt;a class="hanchor" href="#what-ships-with-the-repository" aria-label="Link to this section"&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;The repository includes a Claude Code skill at
+&lt;code&gt;skills/writing-resilience-scenario/&lt;/code&gt;. It is a distilled operating manual for
+authoring: the scenario lifecycle, the step envelope, the result namespaces, the
+findings ledger, and an annotated template that validates clean. It exists so
+Claude Code writes scenarios against the real contract rather than reverse
+engineering it from the Go source.&lt;/p&gt;</description></item></channel></rss>
